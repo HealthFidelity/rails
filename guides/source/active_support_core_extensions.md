@@ -135,9 +135,9 @@ NOTE: Defined in `active_support/core_ext/object/blank.rb`.
 
 ### `duplicable?`
 
-In Ruby 2.4 most objects can be duplicated via `dup` or `clone` except 
+In Ruby 2.4 most objects can be duplicated via `dup` or `clone` except
 methods and certain numbers. Though Ruby 2.2 and 2.3 can't duplicate `nil`,
-`false`, `true`, and  symbols as well as instances `Float`, `Fixnum`, 
+`false`, `true`, and  symbols as well as instances `Float`, `Fixnum`,
 and `Bignum` instances.
 
 ```ruby
@@ -951,7 +951,11 @@ There are cases where you need to define a method with `define_method`, but don'
 
 The method `redefine_method` prevents such a potential warning, removing the existing method before if needed.
 
-NOTE: Defined in `active_support/core_ext/module/remove_method.rb`
+You can also use `silence_redefinition_of_method` if you need to define
+the replacement method yourself (because you're using `delegate`, for
+example).
+
+NOTE: Defined in `active_support/core_ext/module/redefine_method.rb`.
 
 Extensions to `Class`
 ---------------------

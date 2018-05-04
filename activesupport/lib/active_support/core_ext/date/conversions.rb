@@ -1,7 +1,7 @@
 require 'date'
 require 'active_support/inflector/methods'
 require 'active_support/core_ext/date/zones'
-require 'active_support/core_ext/module/remove_method'
+require 'active_support/core_ext/module/redefine_method'
 
 class Date
   DATE_FORMATS = {
@@ -16,14 +16,6 @@ class Date
     :rfc822       => '%d %b %Y',
     :iso8601      => lambda { |date| date.iso8601 }
   }
-
-  # Ruby 1.9 has Date#to_time which converts to localtime only.
-  remove_method :to_time
-
-  # Ruby 1.9 has Date#xmlschema which converts to a string without the time
-  # component. This removal may generate an issue on FreeBSD, that's why we
-  # need to use remove_possible_method here
-  remove_possible_method :xmlschema
 
   # Convert to a formatted string. See DATE_FORMATS for predefined formats.
   #
@@ -63,6 +55,7 @@ class Date
   alias_method :to_default_s, :to_s
   alias_method :to_s, :to_formatted_s
 
+
   # Overrides the default inspect method with a human readable one, e.g., "Mon, 21 Feb 2005"
   def readable_inspect
     strftime('%a, %d %b %Y')
@@ -70,6 +63,7 @@ class Date
   alias_method :default_inspect, :inspect
   alias_method :inspect, :readable_inspect
 
+  silence_redefinition_of_method :to_time
   # Converts a Date instance to a Time, where the time is set to the beginning of the day.
   # The timezone can be either :local or :utc (default :local).
   #
@@ -84,6 +78,7 @@ class Date
     ::Time.send(form, year, month, day)
   end
 
+  silence_redefinition_of_method :xmlschema
   # Returns a string which represents the time in used time zone as DateTime
   # defined by XML Schema:
   #
