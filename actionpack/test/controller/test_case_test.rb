@@ -889,6 +889,14 @@ XML
     assert_equal 'application/json', @response.body
   end
 
+  def test_request_format_kwarg_doesnt_mutate_params
+    params = { foo: 'bar' }.freeze
+
+    assert_nothing_raised do
+      get :test_format, format: 'json', params: params
+    end
+  end
+
   def test_deprecated_request_format_params_with_session
     assert_deprecated { get :test_format, { format: 'json' }, { 'string': 'value1' } }
     assert_equal 'application/json', @response.body
